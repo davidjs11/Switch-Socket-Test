@@ -1,0 +1,6 @@
+*.o
+*.nro
+*.elf
+*.kip
+*.nso
+*.json
