@@ -12,6 +12,5 @@
 // server side functions
 int initServerSocket(int port, int backlog); // returns the server socket
 
-
 // client side functions
 int connectToServer(char *ip, int port); // returns the connection socket
