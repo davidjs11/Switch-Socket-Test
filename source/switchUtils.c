@@ -6,7 +6,7 @@ void initNxlink()
     nxlinkStdio();
 }
 
-void closeNxLink()
+void closeNxlink()
 {
     socketExit();
 }

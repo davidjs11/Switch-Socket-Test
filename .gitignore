@@ -4,3 +4,5 @@
 *.kip
 *.nso
 *.json
+*.nacp
+build/

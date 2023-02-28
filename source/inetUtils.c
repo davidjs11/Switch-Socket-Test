@@ -1,79 +1,61 @@
 #include "inetUtils.h"
+#include <stdio.h>
+#include <unistd.h>
+#include <string.h>
 
-// server side functions
-
-int initServerSocket(int port, int backlog)
+struct socketInfo resolveHost(char *ip, int port)
 {
-    int tmp = 0; // temporal values
+    struct socketInfo server;
+    memset(&server, 0, sizeof(server));
 
-    // init the socket
-    int serverSocket;
-    serverSocket = socket(AF_INET, SOCK_STREAM, 0);
-    if (serverSocket < 0){
-	perror("[-] initServerSocket in socket()");
-	return -1;
+    // create server socket
+    server.socket = socket(AF_INET, SOCK_DGRAM, 0);
+    if (server.socket < 0) {
+	perror("[-] initServer in socket()");
+	memset(&server, 0, sizeof(server));
+	return server;
     }
 
-    // set server address
-    struct sockaddr_in serverAddress;
-    serverAddress.sin_family = AF_INET;
-    serverAddress.sin_port = htons(port);
-    serverAddress.sin_addr.s_addr = INADDR_ANY;
-    
-    // bind address to the socket
-    tmp = bind(serverSocket,
-	      (struct sockaddr *) &serverAddress,
-	      sizeof(serverAddress));
-    if (tmp < 0) {
-	perror("[-] bind()");
-	return -1;
-    }
+    // set address info
+    server.address.sin_family = AF_INET;
+    server.address.sin_port = htons(port);
+    server.address.sin_addr.s_addr = inet_addr(ip);
 
-    // start listening
-    listen(serverSocket, backlog);
-
-    return serverSocket;
+    return server;
 }
 
 
-// client side functions
-
-int connectToServer(char *ip, int port)
+int initServer(struct socketInfo *server)
 {
-    int tmp = 0; // temporal values
-    
-    // init socket
-    int localSocket;
-    localSocket = socket(AF_INET, SOCK_STREAM, 0);
-    if (localSocket < 0) {
-	perror("[-] connectToServer in socket()");
-	return -1;
-    }
-    
-    // get host address
-    struct hostent *serverName;
-    serverName = gethostbyname(ip);
-    if (serverName == NULL) {
-	perror("[-] connectToServer in gethostbyname()");
-	return -1;
-    }
-
-    // set server address
-    struct sockaddr_in serverAddress = {0};
-    serverAddress.sin_family = AF_INET;
-    serverAddress.sin_port = port;
-    bcopy((char *)serverName->h_addr,
-	  (char *)&serverAddress.sin_addr.s_addr,
-	  serverName->h_length);
-
-    // connect to server
-    tmp = connect(localSocket, 
-		 (struct sockaddr *) &serverAddress,
-		 sizeof(serverAddress));
+    // bind server address to the socket
+    int tmp = bind(server->socket, (struct sockaddr *) &(server->address),
+	       sizeof(server->address));
     if (tmp < 0) {
-	perror("[-] connectToServer in connect()");
+	perror("[-] initServer in bind()");
+	memset(server, 0, sizeof(*server));
 	return -1;
     }
 
-    return localSocket;
+    return 0;
+}
+
+int getMessage(struct socketInfo *receiver, struct socketInfo *sender, char *buffer, int bufferSize)
+{
+    int tmp;
+    memset(buffer, 0, bufferSize);
+    sender->size = sizeof(sender->address);
+
+    tmp = recvfrom(receiver->socket, buffer, bufferSize, 0, (struct sockaddr *) &(sender->address),
+	    &(sender->size));
+    return tmp;
+}
+
+int sendMessage(struct socketInfo *receiver, struct socketInfo *sender, char *buffer, int bufferSize)
+{
+   int tmp;
+
+   tmp = sendto(sender->socket, buffer, bufferSize, 0, (struct sockaddr *) &(receiver->address),
+		sizeof(receiver->address));
+
+   return tmp;
 }
