@@ -6,3 +6,4 @@
 *.json
 *.nacp
 build/
+server/server
