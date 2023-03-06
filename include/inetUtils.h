@@ -2,6 +2,9 @@
 /// inetUtils: internet connection utilities ///
 ////////////////////////////////////////////////
 
+#ifndef INET_UTILS
+#define INET_UTILS
+
 #include <sys/socket.h>
 #include <sys/select.h>
 #include <netinet/in.h>
@@ -26,3 +29,5 @@ int getMessage(struct socketInfo *receiver,
 int sendMessage(struct socketInfo *receiver,
 		struct socketInfo *sender,
 		char *buffer, int bufferSize);
+
+#endif

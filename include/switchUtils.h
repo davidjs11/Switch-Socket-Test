@@ -2,6 +2,9 @@
 /// switchUtils.h: nintendo switch homebrew-related utilities ///
 /////////////////////////////////////////////////////////////////
 
+#ifndef SWITCH_UTILS
+#define SWITCH_UTILS
+
 #include <switch.h>
 
 // left joycon button map
@@ -33,3 +36,5 @@
 // nx-link functions (i'm lazy af)
 void initNxlink();
 void closeNxlink();
+
+#endif

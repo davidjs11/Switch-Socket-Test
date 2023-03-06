@@ -2,6 +2,9 @@
 /// graphUtils.h: SDL2 engine utilities (graphs and more) ///
 /////////////////////////////////////////////////////////////
 
+#ifndef GRAPH_UTILS
+#define GRAPH_UTILS
+
 #include <SDL2/SDL.h>
 
 #define WIDTH 1280
@@ -11,3 +14,5 @@ int initSDL(SDL_Window **win, SDL_Renderer **rend);
 int processInput();
 int renderBox(SDL_Renderer *rend, int posX, int posY, int sizeX, int sizeY, 
 	      int r, int g, int b, int a);
+
+#endif
