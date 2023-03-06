@@ -7,3 +7,4 @@
 *.nacp
 build/
 server/server
+ip.txt

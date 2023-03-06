@@ -30,16 +30,31 @@ int initSDL(SDL_Window **win, SDL_Renderer **rend)
     return 0;
 }
 
-int processInput(SDL_Event *event)
+int processInput(SDL_Event *event, int *input)
 {
     while(SDL_PollEvent(event))
     {
 	if (event->type == SDL_JOYBUTTONDOWN)
-	{
-	    printf("button pressed: %d\n", event->jbutton.button);
-	    return event->jbutton.button;
-	}	    
+	    *input = event->jbutton.button;
+	if (event->type == SDL_JOYBUTTONUP)
+	    *input = 0;
     }
+
+    return *input;
+}
+
+int renderBox(SDL_Renderer *rend, int posX, int posY, int sizeX, int sizeY,
+	      int r, int g, int b, int a)
+{
+    SDL_Rect box;
+    box.x = posX;
+    box.y = posY;
+    box.w = sizeX;
+    box.h = sizeY;
+
+    SDL_SetRenderDrawColor(rend, r, g, b, a);
+
+    SDL_RenderFillRect(rend, &box);
 
     return 0;
 }

@@ -14,9 +14,12 @@ int main(void)
 
     while (1)
     {
-	int value;
-	getMessage(&server, &client, (char *) &value, sizeof(value));
-	printf("[+] Data received: %d\n", value);
+	float buffer[2];
+	getMessage(&server, &client, (char *) buffer, sizeof(buffer));
+	printf("[+] Data received: ");
+	for (int i=0; i<sizeof(buffer)/sizeof(float); i++)
+	    printf("%f  ", buffer[i]);
+	printf("\n");
     }
 
     return 0;
