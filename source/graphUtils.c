@@ -30,17 +30,15 @@ int initSDL(SDL_Window **win, SDL_Renderer **rend)
     return 0;
 }
 
-int processInput(SDL_Event *event, int *input)
+void processInput(SDL_Event *event, int *input, int buttons)
 {
     while(SDL_PollEvent(event))
     {
 	if (event->type == SDL_JOYBUTTONDOWN)
-	    *input = event->jbutton.button;
+	    *(input+(event->jbutton.button)) = 1;
 	if (event->type == SDL_JOYBUTTONUP)
-	    *input = 0;
+	    *(input+(event->jbutton.button)) = 0;
     }
-
-    return *input;
 }
 
 int renderBox(SDL_Renderer *rend, int posX, int posY, int sizeX, int sizeY,

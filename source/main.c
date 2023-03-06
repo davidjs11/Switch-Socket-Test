@@ -32,23 +32,26 @@ int main(void)
     initSDL(&win, &renderer);
 
     // game loop
-    int input, running = 1;
+    int input[40], running = 1;
+    memset(input, 0, sizeof(input));
     while (running)
     {
 	// input processing
-	processInput(&event, &input);
+	processInput(&event, input, 20);
+
 	//if (input == BUTTON_PLUS)
 	    //running = 0;
-	if (input == BUTTON_UP_ARROW)
+
+	if (input[BUTTON_UP_ARROW])
 	    movePlayer(&p1, 0, -p1.speed);
 
-	if (input == BUTTON_DOWN_ARROW)
+	if (input[BUTTON_DOWN_ARROW])
 	    movePlayer(&p1, 0, p1.speed);
 
-	if (input == BUTTON_LEFT_ARROW)
+	if (input[BUTTON_LEFT_ARROW])
 	    movePlayer(&p1, -p1.speed, 0);
 
-	if (input == BUTTON_RIGHT_ARROW)
+	if (input[BUTTON_RIGHT_ARROW])
 	    movePlayer(&p1, p1.speed, 0);
 
 	// """" game logic """"
@@ -59,7 +62,7 @@ int main(void)
 	SDL_RenderClear(renderer);
 
 	renderBox(renderer, p1.posX, p1.posY, 100, 100,
-		  0xFF, 0x00, 0xFF, 0x00);
+		  0x00, 0xFF, 0x00, 0x00);
 
 	SDL_RenderPresent(renderer);
 

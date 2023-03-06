@@ -11,7 +11,7 @@
 #define HEIGHT 720
 
 int initSDL(SDL_Window **win, SDL_Renderer **rend);
-int processInput();
+void processInput(SDL_Event *event, int *input, int buttons);
 int renderBox(SDL_Renderer *rend, int posX, int posY, int sizeX, int sizeY, 
 	      int r, int g, int b, int a);
 
